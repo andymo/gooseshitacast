@@ -99,6 +99,10 @@ function lib:Init(profileSets)
     print(chat.header('SetManager') .. chat.message('Init (Level ' .. GetCharLevel() .. '): Recomputed Sets.'));
 end
 
+function lib:HaveItem(item)
+    return CheckItemEquippable(item, lastComputedLevel);
+end
+
 function lib:ReduceSet(set)
     return ReduceSet(set, GetCharLevel());
 end
