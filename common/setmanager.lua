@@ -40,21 +40,15 @@ local ReduceSet = function(set, myLevel)
     local newSet = {};
     for slotName,slotEntries in pairs(set) do
         if (gData.Constants.EquipSlots[slotName] ~= nil) then
-            if type(slotEntries) == 'string' then
-                newSet[slotName] = slotEntries;
-            elseif type(slotEntries) == 'table' then
-                if slotEntries[1] == nil then
-                    newSet[slotName] = slotEntries;
-                else
-                    for _,potentialEntry in ipairs(slotEntries) do
-                        local item = AshitaCore:GetResourceManager():GetItemByName(potentialEntry, 0);
-                        if CheckItemEquippable(item, myLevel) then
-                            newSet[slotName] = potentialEntry;
-                            break;
-                        end
-                    end
+            local slotTable = {};
+            newSet[slotName] = {};
+            for _,potentialEntry in ipairs(slotEntries) do
+                local item = AshitaCore:GetResourceManager():GetItemByName(potentialEntry['Name'], 0);
+                if CheckItemEquippable(item, myLevel) then
+                    slotTable[#slotTable+1] = potentialEntry;
                 end
             end
+            newSet[slotName] = slotTable;
         end
     end
     return newSet;
@@ -100,7 +94,7 @@ function lib:Init(profileSets)
 end
 
 function lib:HaveItem(item)
-    return CheckItemEquippable(item, lastComputedLevel);
+    return CheckItemEquippable(AshitaCore:GetResourceManager():GetItemByName(item, 0), lastComputedLevel);
 end
 
 function lib:ReduceSet(set)
