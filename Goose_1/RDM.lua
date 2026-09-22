@@ -1,12 +1,12 @@
 local layers = gFunc.LoadFile('layers\\layers.lua');
-local setmanager = gFunc.LoadFile('common/setmanager.lua');
+local base = gFunc.LoadFile('common/base.lua');
 
 layers.CreateModeGroup('Spell', {'SpellPotency', 'SpellAccuracy'}, '=')
 layers.CreateModeGroup('Idle', {'IdleDefault', 'IdleSupport', 'IdleHybrid', 'IdlePDT', 'IdleMDT'}, '+=')
 layers.CreateModeGroup('Battle', {'BattleSupport', 'BattleTank'}, '^=')
 layers.CreateModeGroup('ResistElement', {'Fire', 'Earth', 'Wind', 'Ice', 'Lightning'}, '!=')
 
-local Keybinds = {
+local keybinds = {
     {'p', '/lac fwd equipresist'},
     {'^p', '/lac fwd equippdt'},
     {'!p', '/lac fwd equipmdt'},
@@ -83,30 +83,6 @@ local Keybinds = {
     {'space', '/jump'}
 };
 
-local function HaveItem(item)
-    return function () return setmanager:HaveItem(item) end;
-end
-local ElementalStaffTable = {
-    Fire = {{ Name = "Vulcan's Staff", When = HaveItem("Vulcan's Staff") }, { Name = "Fire Staff", When = HaveItem("Fire Staff") }},
-    Earth = {{ Name = "Terra's Staff", When = HaveItem("Terra's Staff") }, { Name = "Earth Staff", When = HaveItem("Earth Staff") }},
-    Water = {{ Name = "Neptune's Staff", When = HaveItem("Neptune's Staff") }, { Name = "Water Staff", When = HaveItem("Water Staff") }},
-    Wind = {{ Name = "Auster's Staff", When = HaveItem("Auster's Staff") }, { Name = "Wind Staff", When = HaveItem("Wind Staff") }},
-    Ice = {{ Name = "Aquilo's Staff", When = HaveItem("Aquilo's Staff") }, { Name = "Ice Staff", When = HaveItem("Ice Staff") }},
-    Lightning = {{ Name = "Jupiter's Staff", When = HaveItem("Jupiter's Staff") }, { Name = "Thunder Staff", When = HaveItem("Thunder Staff") }},
-    Light = {{ Name = "Apollo's Staff", When = HaveItem("Apollo's Staff") }, { Name = "Light Staff", When = HaveItem("Light Staff") }},
-    Dark = {{ Name = "Pluto's Staff", When = HaveItem("Pluto's Staff") }, { Name = "Dark Staff", When = HaveItem("Dark Staff") }},
-};
-local ElementalObiTable = {
-    Fire = {{ Name = "Karin Obi", When = HaveItem("Karin Obi") }},
-    Earth = {{ Name = "Dorin Obi", When = HaveItem("Dorin Obi") }},
-    Water = {{ Name = "Suirin Obi", When = HaveItem("Suirin Obi") }},
-    Wind = {{ Name = "Furin Obi", When = HaveItem("Furin Obi") }},
-    Ice = {{ Name = "Hyorin Obi", When = HaveItem("Hyorin Obi") }},
-    Lightning = {{ Name = "Rairin Obi", When = HaveItem("Rairin Obi") }},
-    Light = {{ Name = "Korin Obi", When = HaveItem("Korin Obi") }},
-    Dark = {{ Name = "Anrin Obi", When = HaveItem("Anrin Obi") }},
-};
-
 local sets = {
     Precast_Priority = {
         Head = {
@@ -125,32 +101,24 @@ local sets = {
 
 };
 
-setmetatable(sets, {__index = function () return {} end})
-
-local function setLayerSets()
+local function updateLayersSets()
     layers.Sets.Precast = sets.Precast;
     layers.Sets.Midcast = { Main = {{ Name = 'Mandau' }},  Body = "Morrigan's Robe" }
 
-    layers.Sets.Midcast['Restoration'] = { Main = ElementalStaffTable['Light'] };
+    layers.Sets.Midcast['Restoration'] = { Main = base.ElementalStaffTable['Light'] };
 end
 
 layers.UserOnLoad = function()
-    setmanager:Init(sets);
-    setLayerSets();
-    for k, v in pairs(Keybinds) do
-        AshitaCore:GetChatManager():QueueCommand(-1, '/bind ' .. v[1] .. ' ' .. v[2]);
-    end
+    base.init(sets, keybinds, updateLayersSets);
+    base.onLoad();
 end
 
 layers.UserOnUnload = function()
-    for k, v in pairs(Keybinds) do
-        AshitaCore:GetChatManager():QueueCommand(-1, '/unbind ' .. v[1]);
-    end
+    base.onUnload();
 end
 
 layers.RegisterCallback("PreHandleDefault", function()
-    setmanager:Recompute();
-    setLayerSets();
+    base.default();
 end, "RecomputeSets")
 
 layers.EnableAutomaticMidcastDelay();
