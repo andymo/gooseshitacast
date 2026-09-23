@@ -23,7 +23,20 @@ profile.Sets = {
         Back = {'Agile Mantle', 'Nomad\'s Mantle'}
     },
     WS_Priority = {
-        Head = {'Voyager Sallet', 'Abtal Turban', 'Chaos Burgeonet', 'Sipahi Turban', 'Valyrie\'s Mask', 'Walkure Mask'},
+        Head = {
+            'Hecatomb Cap +1',
+            'Hecatomb Cap',
+            'Maat\'s Cap',
+            'Chs. Burgeonet +1',
+            'Ace\'s Helm',
+            'Optical Hat',
+            'Voyager Sallet',
+            'Abtal Turban',
+            'Chaos Burgeonet',
+            'Sipahi Turban',
+            'Valyrie\'s Mask',
+            'Walkure Mask'
+        },
         Neck = 'Spike Necklace',
         Ear1 = {'Beetle Earring +1', 'Bone Earring +1'},
         Ear2 = {'Beetle Earring +1', 'Bone Earring +1'},
@@ -34,9 +47,11 @@ profile.Sets = {
         Waist = 'Brave Belt',
         Legs = {'Republic Subligar', 'Ryl.Ftm. Trousers'},
         Feet = {'Wonder Clomps', 'Leaping Boots'},
-        Back = {'Agile Mantle', 'Nomad\'s Mantle'}
+        Back = {'Agile Mantle', 'Nomad\'s Mantle'},
+        Ammo = {'Bomb Core'}
     },
     WS_Guillotine_Priority = {
+        Head = {'Hecatomb Cap +1', 'Hecatomb Cap'}
 
     },
     Dark_Magic_Priority = {
